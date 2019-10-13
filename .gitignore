@@ -1,0 +1,4 @@
+*.pth
+*cache*
+*.jpg
+.vscode
