@@ -4,7 +4,7 @@ Overall goal of this project is to implement most popular, inference only, CPU f
 
 ### Goals
 
-* All models support mmdetection pretrained weights and can be directly used with [mmedtecection model ZOO](https://github.com/open-mmlab/mmdetection/blob/master/docs/MODEL_ZOO.md).
+* All mmdetection pretrained weights and can be directly used with SMD ([mmedtecection model ZOO](https://github.com/open-mmlab/mmdetection/blob/master/docs/MODEL_ZOO.md)).
 * SMD limits number of dependencies to: torch, torchvision, PIL and numpy
 * Whenever possible mmdetection specific code is replaced with torch and torchvision alternatives (transforms, nms etc.)
 
@@ -24,7 +24,9 @@ Overall goal of this project is to implement most popular, inference only, CPU f
 
 ### Sample code
 
-[Take a look at demo jupyter notebook](demo/demo.jpnby)
+Installing requirements: `pip install -r requirements.txt`
+
+For inference code [Take a look at demo jupyter notebook](demo/demo.jpnby)
 
 ```python
 from models.detectors import create_detector
