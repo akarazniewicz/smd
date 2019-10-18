@@ -1,6 +1,6 @@
 ## Simple mmdetection 
 
-Overall goal of this project is to implement most popular, inference only, CPU friendly object detection models [mmdetection framework](https://github.com/open-mmlab/mmdetection). Currently mmdetection does not support CPU only inference mode ([see here](https://github.com/open-mmlab/mmdetection/issues/1274)), however in real life, production models are rarely deployed on GPU enabled environments. SMD solves this problem.
+Overall goal of this project is to implement most popular, inference only, CPU friendly object detection models from [mmdetection framework](https://github.com/open-mmlab/mmdetection). Currently mmdetection does not support CPU only inference mode ([see here](https://github.com/open-mmlab/mmdetection/issues/1274)), however in real life, production models are rarely deployed on GPU enabled environments. SMD solves this problem.
 
 ### Goals
 
