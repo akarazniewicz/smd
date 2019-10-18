@@ -14,13 +14,13 @@ Overall goal of this project is to implement most popular, inference only, CPU f
 
 ### Implemented architectures
 
-[v] RetinaNet with FPN and ResNet 50 backbone
-[v] RetinaNet with FPN and ResNet 101 backbone
-[ ] RetinaNet with FPN and ResNet 50 with deformable convolutions backbone
-[ ] RetinaNet with FPN and ResNet 101 with deformable convolutions backbone
-[ ] SSD 300
-[ ] SSD 512
-[ ] FoveaBox
+- [v] RetinaNet with FPN and ResNet 50 backbone
+- [v] RetinaNet with FPN and ResNet 101 backbone
+- [ ] RetinaNet with FPN and ResNet 50 with deformable convolutions backbone
+- [ ] RetinaNet with FPN and ResNet 101 with deformable convolutions backbone
+- [ ] SSD 300
+- [ ] SSD 512
+- [ ] FoveaBox
 
 ### Sample code
 
