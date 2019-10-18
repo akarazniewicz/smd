@@ -1,7 +1,10 @@
 import torch
 import torch.nn as nn
-import torchvision.transforms as transforms
-from ..transform import Compose, Pad, Resize, MultiScaleFlipAug, Normalize, LoadImage, ImageToTensor, bbox2result
+import torchvision.transforms.functional as T
+from torchvision.transforms import ToTensor, Lambda, Normalize, Compose, Resize
+from ..transforms import transform, scale_factor, scale_size
+from ..utils import bbox2result
+from PIL import Image
 
 
 class RetinaNet(nn.Module):
@@ -23,35 +26,18 @@ class RetinaNet(nn.Module):
         return self.bbox_head(x)
 
     def detect(self, image):
-        transform = transforms.Compose([
-            transforms.Scale((1333, 800)),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375])
-        ])
 
-        tr = Compose([
-            LoadImage(),
-            MultiScaleFlipAug(img_scale=(1333,800), flip=False, transforms=[
-                Resize(keep_ratio=True),
-                Normalize(**dict(mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)),
-                Pad(size_divisor=32),
-                ImageToTensor(keys=['img'])
-            ])
-        ])
+        assert isinstance(image, str) or isinstance(image, Image.Image)
 
-        pipeline = tr(dict(img='test.jpg'))
-        #print(pipeline['img'][0].unsqueeze(0).shape)
-        #print(transform(image).unsqueeze(0).permute(0,1,3,2).shape)
-
-        results = self(pipeline['img'][0].unsqueeze(0))
-        img_metas=[dict(img_shape=pipeline['img_shape'][0], scale_factor=pipeline['scale_factor'][0])]
+        image = Image.open(image) if isinstance(image, str) else image
         
-        #results = self(transform(image).unsqueeze(0).permute(0,1,3,2))
-        #img_metas=[dict(img_shape=(1333, 800), scale_factor=800/image.size.height)]
-        
-        cfg = dict(score_thr=0.05)
-        bbox_list = results + (img_metas, cfg)
-        bbox_list = self.bbox_head.get_bboxes(*bbox_list, rescale=True)
+        factor = scale_factor(image.size, scale=(1333, 800))
+        scaled_size = scale_size(image.size, factor)
+
+        results = self(transform(image, scaled_size).unsqueeze(0))
+
+        bbox_list = self.bbox_head.get_bboxes(
+            *results, [scaled_size], [factor], rescale=True)
 
         bbox_results = [
             bbox2result(det_bboxes, det_labels, self.bbox_head.num_classes + 1)
@@ -59,5 +45,3 @@ class RetinaNet(nn.Module):
         ]
 
         return bbox_results[0]
-
-   

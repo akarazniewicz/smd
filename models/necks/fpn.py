@@ -76,12 +76,11 @@ class FPN(nn.Module):
 
         outs = [self.fpn_convs[i](laterals[i])
                 for i in range(used_backbone_levels)]
-        
 
         orig = inputs[self.num_ins - 1]
         outs.append(self.fpn_convs[used_backbone_levels](orig))
 
         for i in range(used_backbone_levels + 1, self.num_outs):
             outs.append(self.fpn_convs[i](outs[-1]))
-            
+
         return tuple(outs)

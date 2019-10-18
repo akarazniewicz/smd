@@ -1,6 +1,7 @@
 import torch
 import numpy as np
 
+
 def delta2bbox(rois,
                deltas,
                means=[0, 0, 0, 0],
@@ -74,3 +75,22 @@ def delta2bbox(rois,
         y2 = y2.clamp(min=0, max=max_shape[0] - 1)
     bboxes = torch.stack([x1, y1, x2, y2], dim=-1).view_as(deltas)
     return bboxes
+
+
+def bbox2result(bboxes, labels, num_classes):
+    """Convert detection results to a list of numpy arrays.
+    Args:
+        bboxes (Tensor): shape (n, 5)
+        labels (Tensor): shape (n, )
+        num_classes (int): class number, including background class
+    Returns:
+        list(ndarray): bbox results of each class
+    """
+    if bboxes.shape[0] == 0:
+        return [
+            np.zeros((0, 5), dtype=np.float32) for i in range(num_classes - 1)
+        ]
+    else:
+        bboxes = bboxes.cpu().numpy()
+        labels = labels.cpu().numpy()
+        return [bboxes[labels == i, :] for i in range(num_classes - 1)]

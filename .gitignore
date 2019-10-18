@@ -1,4 +1,4 @@
 *.pth
 *cache*
-*.jpg
 .vscode
+*checkpoints*

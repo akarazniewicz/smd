@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 from ..utils import ConvModule, AnchorGenerator, delta2bbox, multiclass_nms
+from ..transforms import transform
 
 def multi_apply(func, *args, **kwargs):
     pfunc = partial(func, **kwargs) if kwargs else func
@@ -26,7 +27,8 @@ class RetinaHead(nn.Module):
         
         super().__init__()
         
-        self.num_classes = num_classes
+        # num of actual classes plus background
+        self.num_classes = num_classes - 1
         self.in_channels = in_channels
         self.stacked_convs = stacked_convs
         self.octave_base_scale = octave_base_scale
@@ -42,7 +44,7 @@ class RetinaHead(nn.Module):
             [2**(i / scales_per_octave) for i in range(scales_per_octave)])
         self.anchor_scales = octave_scales * octave_base_scale
         self.num_anchors = len(anchor_ratios) * len(anchor_scales)
-        self.cls_out_channels = num_classes
+        self.cls_out_channels = self.num_classes
 
         self.anchor_generators = []
         for anchor_base in self.anchor_base_sizes:
@@ -102,7 +104,7 @@ class RetinaHead(nn.Module):
     def forward(self, features):
         return multi_apply(self._forward_step, features)
 
-    def get_bboxes(self, cls_scores, bbox_preds, img_metas, cfg,
+    def get_bboxes(self, cls_scores, bbox_preds, image_sizes, scale_factors, nms_pre=1000,
                    rescale=False):
         """
         Transform network output for a batch into labeled boxes.
@@ -142,6 +144,7 @@ class RetinaHead(nn.Module):
             >>> assert len(det_bboxes) == len(det_labels) == cfg.max_per_img
         """
         assert len(cls_scores) == len(bbox_preds)
+        assert len(image_sizes) == len(scale_factors)
         num_levels = len(cls_scores)
 
         device = cls_scores[0].device
@@ -152,18 +155,18 @@ class RetinaHead(nn.Module):
                 device=device) for i in range(num_levels)
         ]
         result_list = []
-        for img_id in range(len(img_metas)):
+        for img_id in range(len(image_sizes)):
             cls_score_list = [
                 cls_scores[i][img_id].detach() for i in range(num_levels)
             ]
             bbox_pred_list = [
                 bbox_preds[i][img_id].detach() for i in range(num_levels)
             ]
-            img_shape = img_metas[img_id]['img_shape']
-            scale_factor = img_metas[img_id]['scale_factor']
+            image_size = image_sizes[img_id]
+            scale_factor = scale_factors[img_id]
             proposals = self.get_bboxes_single(cls_score_list, bbox_pred_list,
-                                               mlvl_anchors, img_shape,
-                                               scale_factor, cfg, rescale)
+                                               mlvl_anchors, image_size,
+                                               scale_factor, nms_pre, rescale)
             result_list.append(proposals)
         return result_list
 
@@ -171,9 +174,9 @@ class RetinaHead(nn.Module):
                           cls_score_list,
                           bbox_pred_list,
                           mlvl_anchors,
-                          img_shape,
+                          image_size,
                           scale_factor,
-                          cfg,
+                          nms_pre,
                           rescale=False):
         """
         Transform outputs for a single batch item into labeled boxes.
@@ -188,7 +191,6 @@ class RetinaHead(nn.Module):
                                           0).reshape(-1, self.cls_out_channels)
             scores = cls_score.sigmoid()
             bbox_pred = bbox_pred.permute(1, 2, 0).reshape(-1, 4)
-            nms_pre = cfg.get('nms_pre', 1000)
             if nms_pre > 0 and scores.shape[0] > nms_pre:
                 # Get maximum scores for foreground classes.
                 max_scores, _ = scores.max(dim=1)
@@ -197,7 +199,7 @@ class RetinaHead(nn.Module):
                 bbox_pred = bbox_pred[topk_inds, :]
                 scores = scores[topk_inds, :]
             bboxes = delta2bbox(anchors, bbox_pred, self.target_means,
-                                self.target_stds, img_shape)
+                                self.target_stds, image_size)
             mlvl_bboxes.append(bboxes)
             mlvl_scores.append(scores)
         mlvl_bboxes = torch.cat(mlvl_bboxes)
