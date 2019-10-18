@@ -44,6 +44,9 @@ torch.utils.model_zoo.load_url(
 # pretrained checkpoint.
 retina = create_detector('retinanet_r101_fpn_1x', number_of_classes=81, pretrained='retinanet_r101_fpn_1x_20181129-f016f384.pth')
 
+# with pytorch 1.3, model can be easily quantized (better CPU performance, smaller footprint).
+retina = torch.quantization.quantize_dynamic(retina, dtype=torch.qint8)
+
 # inference result is exactly the same like in mmdetection
 with torch.no_grad():
     result = retina.detect('demo.jpg')
