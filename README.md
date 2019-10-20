@@ -4,7 +4,7 @@ Overall goal of this project is to implement most popular, inference only, CPU f
 
 ### Goals
 
-* All mmdetection pretrained weights and can be directly used with SMD ([mmedtecection model ZOO](https://github.com/open-mmlab/mmdetection/blob/master/docs/MODEL_ZOO.md)).
+* All mmdetection pretrained weights can be directly used with SMD ([mmedtecection model ZOO](https://github.com/open-mmlab/mmdetection/blob/master/docs/MODEL_ZOO.md)).
 * SMD limits number of dependencies to: torch, torchvision, PIL and numpy
 * Whenever possible mmdetection specific code is replaced with torch and torchvision alternatives (transforms, nms etc.)
 
@@ -14,6 +14,7 @@ Overall goal of this project is to implement most popular, inference only, CPU f
 
 ### Implemented architectures
 
+- [ ] TorchScript support (current priority)
 - [x] RetinaNet with FPN and ResNet 50 backbone
 - [x] RetinaNet with FPN and ResNet 101 backbone
 - [ ] RetinaNet with FPN and ResNet 50 with deformable convolutions backbone
@@ -22,11 +23,13 @@ Overall goal of this project is to implement most popular, inference only, CPU f
 - [ ] SSD 512
 - [ ] FoveaBox
 
+### Installing
+
+`pip install -r requirements.txt`
+
 ### Sample code
 
-Installing requirements: `pip install -r requirements.txt`
-
-For inference code [Take a look at demo jupyter notebook](demo/demo.jpnby)
+[See demo jupyter notebook complete example](demo/demo.jpnby)
 
 ```python
 from models.detectors import create_detector
