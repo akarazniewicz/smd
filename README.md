@@ -6,7 +6,7 @@ Overall goal of this project is to implement most popular, inference only, CPU f
 
 * All mmdetection pretrained weights can be directly used with SMD ([mmedtecection model ZOO](https://github.com/open-mmlab/mmdetection/blob/master/docs/MODEL_ZOO.md)).
 * SMD limits number of dependencies to: torch, torchvision, PIL and numpy
-* Whenever possible mmdetection specific code is replaced with torch and torchvision alternatives (transforms, nms etc.)
+* Wherever possible mmdetection specific code is replaced with torch and torchvision alternatives (transforms, nms etc.)
 
 ### Non-goals
 
