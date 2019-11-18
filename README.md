@@ -10,7 +10,7 @@ Overall goal of this project is to implement most popular, inference only, CPU f
 
 ### Non-goals
 
-* By design this code has no training capabilities at all. All training related code is either removed or reduced to bare minimum. If You would like to train, finetune or transfer learning - use [mmdetection framework](https://github.com/open-mmlab/mmdetection).
+* By design this code has no training capabilities at all. All training related code is either removed or reduced to bare minimum. For training, finetuning or transfer learning - use [mmdetection framework](https://github.com/open-mmlab/mmdetection) and use trained model with smd for CPU inference.
 
 ### Implemented architectures
 
