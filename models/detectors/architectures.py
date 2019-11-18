@@ -67,4 +67,4 @@ def create_detector(name, number_of_classes, pretrained, device='cpu'):
         return model.eval()
     else:
         raise ValueError(
-            "Invalid model name. Supported models: {}".format(architectures.keys))
+            "Invalid model name. Supported models: {}".format(list(architectures.keys)))
