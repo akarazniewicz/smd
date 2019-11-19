@@ -18,7 +18,7 @@ Overall goal of this project is to implement most popular, inference only, CPU f
 - [x] RetinaNet with FPN and ResNet 50 backbone
 - [x] RetinaNet with FPN and ResNet 101 backbone
 - [x] Mask R-CNN with FPN and ResNet 50 backbone
-- [ ] Mask R-CNN with FPN and ResNet 101 backbone
+- [x] Mask R-CNN with FPN and ResNet 101 backbone
 - [ ] RetinaNet with FPN and ResNet 50 with deformable convolutions backbone
 - [ ] RetinaNet with FPN and ResNet 101 with deformable convolutions backbone
 - [ ] SSD 300
