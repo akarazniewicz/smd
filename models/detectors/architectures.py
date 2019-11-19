@@ -53,9 +53,13 @@ def create_detector(name, number_of_classes, pretrained, device='cpu'):
                                           target_stds=[1.0, 1.0, 1.0, 1.0]
                                       ))),
         'mask_rcnn_r50_fpn_1x': (MaskRCNNMapper(),
-                                   MaskRCNN(backbone=resnet_fpn_backbone('resnet50', pretrained=False),
-                                            num_classes=number_of_classes
-                                            ))
+                                 MaskRCNN(backbone=resnet_fpn_backbone('resnet50', pretrained=False),
+                                          num_classes=number_of_classes
+                                          )),
+        'mask_rcnn_r101_fpn_1x': (MaskRCNNMapper(),
+                                  MaskRCNN(backbone=resnet_fpn_backbone('resnet101', pretrained=False),
+                                           num_classes=number_of_classes
+                                           ))
     }
 
     arch = architectures.get(name)
@@ -67,4 +71,4 @@ def create_detector(name, number_of_classes, pretrained, device='cpu'):
         return model.eval()
     else:
         raise ValueError(
-            "Invalid model name. Supported models: {}".format(list(architectures.keys)))
+            "Invalid model name. Supported models: {}".format(architectures.keys()))
