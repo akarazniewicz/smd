@@ -17,6 +17,8 @@ Overall goal of this project is to implement most popular, inference only, CPU f
 - [ ] TorchScript support (current priority)
 - [x] RetinaNet with FPN and ResNet 50 backbone
 - [x] RetinaNet with FPN and ResNet 101 backbone
+- [x] Faster R-CNN with FPN and ResNet 50 backbone
+- [x] Faster R-CNN with FPN and ResNet 101 backbone
 - [x] Mask R-CNN with FPN and ResNet 50 backbone
 - [x] Mask R-CNN with FPN and ResNet 101 backbone
 - [ ] RetinaNet with FPN and ResNet 50 with deformable convolutions backbone
@@ -49,7 +51,7 @@ torch.utils.model_zoo.load_url(
 # create RetinaNet with ResNet 101 backbone, and pretrained COCO weights
 # Note: COCO has 80 classes plus one background class. You can use Your own model. Just set You number of classes and feed
 # pretrained checkpoint.
-retina = create_detector('retinanet_r101_fpn_1x', number_of_classes=81, pretrained='retinanet_r101_fpn_1x_20181129-f016f384.pth')
+retina = create_detector('retinanet_r101_fpn', number_of_classes=81, pretrained='retinanet_r101_fpn_1x_20181129-f016f384.pth')
 
 # with pytorch 1.3, model can be easily quantized (better CPU performance, smaller footprint).
 retina = torch.quantization.quantize_dynamic(retina, dtype=torch.qint8)
