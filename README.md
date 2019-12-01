@@ -1,16 +1,17 @@
 ## Simple mmdetection 
 
-Overall goal of this project is to implement most popular, inference only, CPU friendly object detection models from [mmdetection framework](https://github.com/open-mmlab/mmdetection). Currently mmdetection does not support CPU only inference mode ([see here](https://github.com/open-mmlab/mmdetection/issues/1274)), however in real life, production models are rarely deployed on GPU enabled environments. SMD solves this problem.
+Overall goal of this project is to implement most popular, inference only, CPU friendly object detection models from [mmdetection framework](https://github.com/open-mmlab/mmdetection) for research and production use. Currently mmdetection does not support CPU only inference mode ([see here](https://github.com/open-mmlab/mmdetection/issues/1274)), however in real life, production models are rarely deployed on GPU enabled environments. SMD solves this problem.
 
 ### Goals
 
+* Create foundation for better understanding and research of CPU-only DNN performance
 * All mmdetection pretrained weights can be directly used with SMD ([mmedtecection model ZOO](https://github.com/open-mmlab/mmdetection/blob/master/docs/MODEL_ZOO.md)).
 * SMD limits number of dependencies to: torch, torchvision, PIL and numpy
 * Wherever possible mmdetection specific code is replaced with torch and torchvision alternatives (transforms, nms etc.)
 
 ### Non-goals
 
-* By design this code has no training capabilities at all. All training related code is either removed or reduced to bare minimum. For training, finetuning or transfer learning - use [mmdetection framework](https://github.com/open-mmlab/mmdetection) and use trained model with smd for CPU inference.
+* By design this code has no training capabilities at all. Training specific code is either removed or reduced to the bare minimum. For training, finetuning or transfer learning use [mmdetection](https://github.com/open-mmlab/mmdetection) you can then just use trained model wit smd for CPU only inference.
 
 ### Implemented architectures
 
