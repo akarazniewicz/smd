@@ -34,7 +34,7 @@ Overall goal of this project is to implement most popular, inference only, CPU f
 
 ### Sample code
 
-[See demo jupyter notebook complete example](demo/demo.jpnby)
+[See demo jupyter notebook complete example](demo/demo.ipynb)
 
 ```python
 from models.detectors import create_detector
